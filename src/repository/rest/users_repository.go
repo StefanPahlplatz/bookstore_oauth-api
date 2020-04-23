@@ -2,7 +2,6 @@ package rest
 
 import (
 	"encoding/json"
-	"github.com/StefanPahlplatz/bookstore_oauth-api/src/domain/access_token"
 	"github.com/StefanPahlplatz/bookstore_oauth-api/src/domain/users"
 	"github.com/StefanPahlplatz/bookstore_oauth-api/src/utils/errors"
 	"github.com/mercadolibre/golang-restclient/rest"
@@ -23,15 +22,16 @@ type RestUsersRepository interface {
 type usersRepository struct {
 }
 
-func NewRepository() RestUsersRepository {
+func NewRestUsersRepository() RestUsersRepository {
 	return &usersRepository{}
 }
 
 func (r *usersRepository) LoginUser(email string, password string) (*users.User, *errors.RestErr) {
-	request := access_token.AccessTokenRequest{
-		Username: email,
+	request := users.UserLoginRequest{
+		Email:    email,
 		Password: password,
 	}
+
 	response := usersRestClient.Post("/users/login", request)
 
 	if response == nil || response.Response == nil {
